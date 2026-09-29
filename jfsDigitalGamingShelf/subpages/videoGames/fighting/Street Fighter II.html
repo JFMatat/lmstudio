@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../../../css/standard.css">
+    <title>Street Fighter II</title>
+    <style>
+        :root {
+            --bg-color: #1E1F22;
+            --card-bg: #313338;
+            --primary-text: #ffffff;
+            --accent-color: #4a90e2;
+            --danger-color: #e74c3c;
+            --border-radius: 15px;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .container {
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+
+        h1, h2, h3 {
+            margin-top: 0;
+            text-align: center; /* Added centering for all headings */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #313338;
+        }
+
+        th {
+            background-color: #313338;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #313338;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: opacity 0.2s;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .pagination {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .winrate-bar {
+            height: 8px;
+            background: #313338;
+            border-radius: 4px;
+            overflow: hidden;
+            width: 100px;
+            display: inline-block;
+        }
+
+        .winrate-fill {
+            height: 100%;
+            background: #2ecc71;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Fighting Game Stats Tracker</h1>
+
+    <!-- Summary Block -->
+    <div class="card">
+        <h2>Overview</h2>
+        <table id="summary-table">
+            <thead>
+                <tr>
+                    <th>Total Matches</th>
+                    <th>Wins</th>
+                    <th>Losses</th>
+                    <th>Winrate</th>
+                    <th>Most Played Character</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td id="summary-total">-</td>
+                    <td id="summary-wins">-</td>
+                    <td id="summary-losses">-</td>
+                    <td id="summary-winrate">-</td>
+                    <td id="summary-most-played">-</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Character Stats Blocks -->
+    <div class="stats-grid">
+        <div class="card">
+            <h2>Playing as...</h2>
+            <table id="playing-as-table">
+                <thead>
+                    <tr>
+                        <th>Character</th>
+                        <th>Matches</th>
+                        <th>Wins</th>
+                        <th>Losses</th>
+                        <th>Winrate</th>
+                    </tr>
+                </thead>
+                <tbody id="playing-as-body"></tbody>
+            </table>
+        </div>
+
+        <div class="card">
+            <h2>Playing Against...</h2>
+            <table id="playing-against-table">
+                <thead>
+                    <tr>
+                        <th>Character</th>
+                        <th>Matches</th>
+                        <th>Wins</th>
+                        <th>Losses</th>
+                        <th>Winrate</th>
+                    </tr>
+                </thead>
+                <tbody id="playing-against-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Logging Section -->
+    <div class="card">
+        <h2>Log Match</h2>
+        <div class="stats-grid" style="grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div class="form-group">
+                <label>Your Character</label>
+                <select id="log-your-char"></select>
+            </div>
+            <div class="form-group">
+                <label>Opponent Character</label>
+                <select id="log-opp-char"></select>
+            </div>
+        </div>
+        <div class="stats-grid" style="grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div class="form-group">
+                <label>Result</label>
+                <select id="log-result">
+                    <option value="win">Win</option>
+                    <option value="loss">Loss</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Date Played</label>
+                <input type="datetime-local" id="log-date">
+            </div>
+        </div>
+        <button class="btn-primary" onclick="logMatch()">Log Match</button>
+        <button class="btn-danger" onclick="wipeData()">Wipe All Recordings</button>
+    </div>
+
+    <!-- Records Table -->
+    <div class="card">
+        <h2>Match History</h2>
+        <div style="text-align:center; margin-bottom: 15px;">
+            <button id="sort-asc" class="btn-primary" onclick="handleSort('asc')">Sort by Date (Asc)</button>
+            <button id="sort-desc" class="btn-primary" onclick="handleSort('desc')">Sort by Date (Desc)</button>
+        </div>
+        <table id="history-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Your Char</th>
+                    <th>Opponent Char</th>
+                    <th>Result</th>
+                </tr>
+            </thead>
+            <tbody id="history-body"></tbody>
+        </table>
+        <div class="pagination">
+            <button onclick="changePage(-1)">Previous Page</button>
+            <span id="page-info">Page 1</span>
+            <button onclick="changePage(1)">Next Page</button>
+        </div>
+    </div>
+</div>
+<footer>
+    <p><a href="../fighting.html">Return to the Fighting Games list</a></p>
+</footer>
+
+<script>
+    // --- Data & Configuration ---
+    const roster = ["Balrog", "Blanka", "Cammy", "Chun-Li", "Dee Jay", "Dhalsim", "Fei Long", "Guile", "Honda", "Ken", "M. Bison", "Ryu", "Sagat", "T. Hawk", "Vega", "Zangief"];
+    
+    // Load data from localStorage or initialize
+    let matches = JSON.parse(localStorage.getItem('fgs_matches')) || [];
+
+    // --- UI Elements ---
+    const playingAsBody = document.getElementById('playing-as-body');
+    const playingAgainstBody = document.getElementById('playing-against-body');
+    const historyBody = document.getElementById('history-body');
+    const summaryTotal = document.getElementById('summary-total');
+    const summaryWins = document.getElementById('summary-wins');
+    const summaryLosses = document.getElementById('summary-losses');
+    const summaryWinrate = document.getElementById('summary-winrate');
+    const summaryMostPlayed = document.getElementById('summary-most-played');
+
+    let sortDirection = 'desc'; // Default: descending (newest first)
+    let currentPage = 1;
+    const itemsPerPage = 50;
+
+    // --- Initialization ---
+    function init() {
+        // Populate dropdowns
+        const yourCharSelect = document.getElementById('log-your-char');
+        const oppCharSelect = document.getElementById('log-opp-char');
+        
+        // Sort roster alphabetically for display purposes
+        const sortedRoster = [...roster].sort();
+
+        sortedRoster.forEach(char => {
+            const opt1 = document.createElement('option');
+            opt1.value = char;
+            opt1.textContent = char;
+            yourCharSelect.appendChild(opt1);
+
+            const opt2 = document.createElement('option');
+            opt2.value = char;
+            opt2.textContent = char;
+            oppCharSelect.appendChild(opt2);
+        });
+
+        // Set default date to now
+        const now = new Date();
+        now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+        document.getElementById('log-date').value = now.toISOString().slice(0, 16);
+
+        updateUI();
+    }
+
+    // --- Core Functions ---
+    function updateUI() {
+        localStorage.setItem('fgs_matches', JSON.stringify(matches));
+        
+        updateSummary();
+        updateCharacterStats();
+        renderHistory();
+    }
+
+    function updateSummary() {
+        const total = matches.length;
+        const wins = matches.filter(m => m.result === 'win').length;
+        const losses = total - wins;
+        const winrate = total > 0 ? ((wins / total) * 100).toFixed(1) : 0;
+
+        summaryTotal.textContent = total;
+        summaryWins.textContent = wins;
+        summaryLosses.textContent = losses;
+        summaryWinrate.textContent = winrate + '%';
+
+        // Find most played character
+        let mostPlayed = "N/A";
+        let maxCount = 0;
+        const charCounts = {};
+        
+        roster.forEach(char => charCounts[char] = 0);
+        matches.forEach(m => {
+            charCounts[m.yourChar]++;
+        });
+
+        for (const char in charCounts) {
+            if (charCounts[char] > maxCount) {
+                maxCount = charCounts[char];
+                mostPlayed = char;
+            }
+        }
+        summaryMostPlayed.textContent = mostPlayed;
+    }
+
+    function updateCharacterStats() {
+        playingAsBody.innerHTML = '';
+        playingAgainstBody.innerHTML = '';
+
+        const asStats = {};
+        const againstStats = {};
+
+        roster.forEach(char => {
+            asStats[char] = { matches: 0, wins: 0, losses: 0 };
+            againstStats[char] = { matches: 0, wins: 0, losses: 0 };
+        });
+
+        matches.forEach(m => {
+            asStats[m.yourChar].matches++;
+            if (m.result === 'win') asStats[m.yourChar].wins++;
+            else asStats[m.yourChar].losses++;
+
+            againstStats[m.oppChar].matches++;
+        });
+
+        roster.forEach(char => {
+            const asRow = createStatsRow(char, asStats[char]);
+            playingAsBody.appendChild(asRow);
+
+            // For "Against", we want to see your win/loss record specifically against those characters
+            const againstMatchData = matches.filter(m => m.oppChar === char);
+            const againstWins = againstMatchData.filter(m => m.result === 'win').length;
+            const againstLosses = againstMatchData.length - againstWins;
+            
+            const againstRow = createStatsRow(char, {
+                matches: againstMatchData.length,
+                wins: againstWins,
+                losses: againstLosses
+            });
+            playingAgainstBody.appendChild(againstRow);
+        });
+    }
+
+    function createStatsRow(name, stats) {
+        const winrate = stats.matches > 0 ? ((stats.wins / stats.matches) * 100).toFixed(1) : 0;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td style="font-weight:bold">${name}</td>
+            <td>${stats.matches}</td>
+            <td style="color:green">${stats.wins}</td>
+            <td style="color:red">${stats.losses}</td>
+            <td>${winrate}%</td>
+        `;
+        return tr;
+    }
+
+    function logMatch() {
+        const yourChar = document.getElementById('log-your-char').value;
+        const oppChar = document.getElementById('log-opp-char').value;
+        const result = document.getElementById('log-result').value;
+        const date = document.getElementById('log-date').value;
+
+        if (!date) {
+            alert("Please select a date.");
+            return;
+        }
+
+        const newMatch = {
+            id: Date.now(),
+            yourChar,
+            oppChar,
+            result,
+            date
+        };
+
+        matches.push(newMatch); // Added to the end; sorting logic handles display order
+        updateUI();
+    }
+
+    // --- Sorting/Pagination Logic ---
+
+    /**
+     * Sorts the matches array and returns a new, sorted array.
+     * @param {('asc'|'desc')} direction - The desired sort order ('asc' or 'desc').
+     * @returns {Array} A copy of the matches array, sorted by date.
+     */
+    function getSortedMatches(direction) {
+        // Create a shallow copy to avoid modifying the original `matches` array
+        const sorted = [...matches];
+
+        sorted.sort((a, b) => {
+            const dateA = new Date(a.date);
+            const dateB = new Date(b.date);
+            let comparison = 0;
+
+            // Compare dates: 1 if A > B, -1 if A < B, 0 if equal
+            if (dateA > dateB) comparison = 1;
+            else if (dateA < dateB) comparison = -1;
+            else comparison = 0; 
+
+            // If descending, we reverse the natural sort order (b compared to a).
+            return direction === 'desc' ? (comparison * -1) : comparison;
+        });
+        return sorted;
+    }
+
+
+    function renderHistory() {
+        let currentMatches = getSortedMatches(sortDirection);
+
+        const start = (currentPage - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+        const pageItems = currentMatches.slice(start, end);
+
+        historyBody.innerHTML = '';
+        if (pageItems.length === 0) {
+            historyBody.innerHTML = '<tr style="text-align:center"><td colspan="4">No matches recorded yet.</td></tr>';
+        } else {
+            pageItems.forEach(m => {
+                const tr = document.createElement('tr');
+                // Format date to display time without T and only local time part (e.g., 2026-09-26 14:30)
+                const formattedDate = m.date.replace('T', ' '); 
+                tr.innerHTML = `
+                    <td style="font-size:0.8em">${formattedDate}</td>
+                    <td>${m.yourChar}</td>
+                    <td>${m.oppChar}</td>
+                    <td style="color: ${m.result === 'win' ? 'green' : 'red'}">${m.result.toUpperCase()}</td>
+                `;
+                historyBody.appendChild(tr);
+            });
+        }
+
+        document.getElementById('page-info').textContent = `Page ${currentPage}`;
+    }
+
+    function changePage(dir) {
+        const maxPage = Math.ceil(matches.length / itemsPerPage);
+        const newPage = currentPage + dir;
+        if (newPage >= 1 && newPage <= maxPage) {
+            currentPage = newPage;
+            renderHistory();
+        }
+    }
+
+    // --- Sorting Handlers ---
+    function handleSort(direction) {
+        sortDirection = direction;
+        currentPage = 1; // Reset to first page when sorting changes
+        renderHistory();
+    }
+
+    function resetSort() {
+        sortDirection = 'desc'; // Default back to newest first (descending date)
+        currentPage = 1;
+        renderHistory();
+    }
+
+    function wipeData() {
+        if (confirm("Are you sure you want to wipe ALL recordings? This cannot be undone.")) {
+            matches = [];
+            updateUI();
+        }
+    }
+
+    // Run init
+    init();
+</script>
+
+</body>
+</html>

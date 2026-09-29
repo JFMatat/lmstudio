@@ -1,0 +1,84 @@
+body {
+    font-family: hack;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh; /* Ensures full viewport height */
+    background-color: #1f1e26; /* Set page background to black */
+    color: white; /* Ensure default text color is white for contrast */
+}
+
+.container {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    gap: 30px; /* Reduced gap for better vertical flow */
+    max-width: 1200px;
+    width: 90%;
+    justify-content: center;
+    padding-bottom: 20px;
+}
+
+.game-block {
+    width: 100%; /* Ensure the block takes full available width */
+    flex: none; /* Override any previous flex behavior */
+    min-width: 300px;
+    height: 200px; /* Fixed height for visual consistency */
+    background-size: cover;
+    background-position: center;
+    border-radius: 25px; /* Rounded edges */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* Added a shadow for depth */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover effect */
+.game-block:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+}
+
+.game-title {
+    font-size: 3em;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.4); /* Semi-transparent overlay for readability */
+    border-radius: 15px; color: white;
+}
+
+footer {
+    position: fixed;
+    bottom: -30px;
+    left: 0;
+    right: 0;
+    padding: 0px 0px; /* Reduced padding */
+    background-color: rgba(0, 0, 0, 0.9);
+    text-align: center;
+    width: 100%;
+    /* We rely on the padding property below for side spacing instead of complex width constraints */
+    box-shadow: 0 0px 10px rgba(0, 0, 0, 0.7); /* Shadow mimicking the block */
+    border-top: 5px solid #ffc870; /* Subtle separation line */
+}
+
+/* Styling for links inside the footer to match the card title look */
+footer a {
+    color: white;
+    text-decoration: none;
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 5px;
+    background-color: rgba(0, 0, 0, 0.4); /* Semi-transparent overlay */
+    border-radius: 10px; /* Slightly smaller radius than game blocks */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover effect for footer links */
+footer a:highlight {
+    transform: background-color: #e5e5e5;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
+}
+

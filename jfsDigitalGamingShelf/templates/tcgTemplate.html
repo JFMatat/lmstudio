@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TCG Tracker Template (Dark Mode)</title>
+    <!-- Link to the required standard CSS -->
+    <link rel="stylesheet" href="../css/standard.css">
+
+    <style>
+        /* Dark Mode Base Styling */
+        body { font-family: sans-serif; margin: 20px; background-color: #1e1e1e; color: #ddd; }
+        .tracker-container { max-width: 1200px; margin: auto; background-color: #252526; padding: 30px; border-radius: 8px; box-shadow: 0 0 15px rgba(0,0,0,0.3); }
+        h1 { text-align: center; color: #ff7f00; margin-bottom: 30px; } /* Lighter blue for main title */
+        section { margin-bottom: 40px; padding: 20px; border: 1px solid #3c3c3c; border-radius: 6px; background-color: #2d2d30; }
+        h2 { color: #ffa500; border-bottom: 2px solid #4a4a4a; padding-bottom: 10px; margin-top: 0; }
+
+        /* Collection Specific Styles */
+        .expansion-block { border: 1px solid #3c3c3c; margin-bottom: 10px; border-radius: 4px; overflow: hidden; background-color: #222; }
+        .collapsible-header { background-color: #333; padding: 15px; cursor: pointer; font-weight: bold; display: flex; justify-content: space-between; align-items: center; color: #ddd;}
+        .card-list { padding: 20px; border-top: 1px solid #3c3c3c; }
+        .card-entry { display: flex; align-items: center; margin-bottom: 15px; padding: 10px; border-bottom: 1px dotted #4a4a4a; }
+        .card-image { width: 80px; height: auto; object-fit: contain; margin-right: 20px; border: 1px solid #444; background-color: #111;}
+        .card-info strong { display: block; color: #ffffff; font-size: 1.1em;}
+        /* Card Details Container */
+        .card-details-wrapper > span { display: block; color: #aaa; line-height: 1.4; margin: 2px 0;}
+        .variation-count { font-size: 0.9em; color: #aaa; margin-left: auto; }
+
+        /* Decks Specific Styles */
+        .deck-container { border: 2px dashed #5a4d3c; padding: 15px; margin-top: 20px; background-color: #282b2c; border-radius: 4px; }
+        .card-added-to-deck { display: inline-block; background-color: #3a5f40; color: #d4edda; padding: 5px 10px; margin: 5px; border-radius: 20px; font-size: 0.9em;}
+        .deck-card-counter { display: block; text-align: center; margin-top: 10px; color: #aaa; }
+
+        /* Logs Specific Styles */
+        .log-entry-form div { margin-bottom: 15px; }
+        .log-entry-form label { display: block; margin-bottom: 5px; font-weight: bold; color: #ffa500;}
+        .log-entry-form input[type="text"], .log-entry-form input[type="date"], select {
+            width: calc(100% - 20px);
+            padding: 10px;
+            border: 1px solid #555;
+            border-radius: 4px;
+            background-color: #3c3c3c; /* Darker background for inputs */
+            color: #ddd;
+        }
+    </style>
+</head>
+<body>
+
+<div class="tracker-container">
+    <h1>🃏 TCG Tracker</h1>
+
+    <!-- ========================================== -->
+    <!-- I. COLLECTION BLOCK -->
+    <!-- ========================================== -->
+    <section id="collection-block">
+        <h2>📚 Collection Inventory</h2>
+        <p>Use this section to track all cards you own, grouped by expansion set.</p>
+
+        <!-- Example: Expansion 1 (Collapsible) -->
+        <div class="expansion-block">
+            <div class="collapsible-header" data-target="set1-cards">Expansion Set 1 (Example) <span class="toggle-icon">+</span></div>
+            <div id="set1-cards" class="card-list" style="display: none;">
+                <h3 style="color: #ccc;">Cards in Set 1</h3>
+                <!-- Card Entry Example -->
+                <div class="card-entry">
+                    <img src="/home/blernould/Fichiers/Projets/lmstudio/jfsDigitalGamingShelf/images/pokemonTCG/TropiusPBL1.webp" alt="Card Name Image" class="card-image">
+                    <div class="card-info">
+                        <strong>Star Dragon</strong>
+                        <div class="card-details-wrapper">
+                            <span style="display: block;">Type: Creature</span>
+                            <span style="display: block;">Element: Light</span>
+                            <span style="display: block;">Rarity: Rare</span>
+                            <span class="variation-count">ID: XYZ123 | Variations Owned: 3 (Standard, Foil, Secret)</span>
+                        </div>
+                    </div>
+                </div>
+                 <!-- Card Entry Example -->
+                 <div class="card-entry">
+                    <img src="/home/blernould/Fichiers/Projets/lmstudio/jfsDigitalGamingShelf/images/pokemonTCG/TropiusPBL1.webp" class="card-image">
+                    <div class="card-info">
+                        <strong>Tropius</strong>
+                        <div class="card-details-wrapper">
+                            <span style="display: block;">Type: Creature</span>
+                            <span style="display: block;">Element: Fire</span>
+                            <span style="display: block;">Rarity: Uncommon</span>
+                            <span class="variation-count">ID: ABC456 | Variations Owned: 1 (Standard)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Example: Expansion 2 (Collapsible) -->
+        <div class="expansion-block">
+             <div class="collapsible-header" data-target="set2-cards">Expansion Set 2 (Example) <span class="toggle-icon">+</span></div>
+            <div id="set2-cards" class="card-list" style="display: none;">
+                <h3 style="color: #ccc;">Cards in Set 2</h3>
+                <!-- More card entries here... -->
+            </div>
+        </div>
+
+    </section>
+
+
+    <!-- ========================================== -->
+    <!-- II. DECKS BLOCK -->
+    <!-- ========================================== -->
+    <section id="decks-block">
+        <h2>⚔️ Decks Tracker</h2>
+        <p>Define and manage your competitive decks. Cards added here are marked as 'listed' for quick reference.</p>
+
+        <!-- Deck Sub-Block Example -->
+        <div class="deck-container" id="deck1">
+            <h3 style="color: #eee;">Deck Name: Alpha Aggro Build</h3>
+            <div style="margin-bottom: 20px;">
+                <label>Add Cards:</label><br>
+                <!-- Card instances will be added here -->
+                <span class="card-added-to-deck">Star Dragon (x1)</span>
+                <span class="card-added-to-deck">Blaze Creature (x2)</span>
+            </div>
+            <div class="deck-card-counter">Total Cards: 3/40</div>
+        </div>
+
+        <!-- Another Deck Sub-Block Example -->
+         <div class="deck-container" id="deck2">
+            <h3 style="color: #eee;">Deck Name: Control Setup</h3>
+             <div style="margin-bottom: 20px;">
+                <label>Add Cards:</label><br>
+                <!-- Card instances will be added here -->
+                 <span class="card-added-to-deck">Support Unit (x1)</span>
+            </div>
+            <div class="deck-card-counter">Total Cards: 1/40</div>
+        </div>
+
+    </section>
+
+
+    <!-- ========================================== -->
+    <!-- III. LOGS BLOCK -->
+    <!-- ========================================== -->
+    <section id="logs-block">
+        <h2>📝 Match Logs</h2>
+        <p>Keep track of your TCG matches.</p>
+
+        <form class="log-entry-form" onsubmit="recordMatch(event)">
+            <div style="display: grid; grid-template-columns: 1fr 1.5fr 1fr 1fr; gap: 20px;">
+                <!-- Deck Used Selector (Populates from Decks Block) -->
+                <div>
+                    <label for="deckUsed">Deck Used:</label>
+                    <select id="deckUsed" required>
+                        <option value="">Your Deck</option>
+                        <!-- Options populated via JS based on decks defined above -->
+                    </select>
+                </div>
+
+                 <!-- Opponent Deck (Simple text prompt) -->
+                <div>
+                    <label for="opponentDeck">Opponent's Deck:</label>
+                    <input type="text" id="opponentDeck" placeholder="Opponent's Deck" required>
+                </div>
+
+                <!-- Result Indicator -->
+                <div>
+                    <label for="result">Result:</label>
+                    <select id="result" required>
+                        <option value="Win">Victory</option>
+                        <option value="Loss">Defeat</option>
+                        <option value="Draw">Draw</option>
+                    </select>
+                </div>
+
+                 <!-- Date Picker -->
+                <div>
+                    <label for="date">Date of Match:</label>
+                    <input type="date" id="date" required>
+                </div>
+            </div>
+             <button type="submit" style="padding: 10px 20px; background-color: #ffa500; color: #1e1e1e; border: none; cursor: pointer; border-radius: 4px;">Log Match</button>
+             <button type="button" id="resetLogsBtn" style="padding: 10px 20px; background-color: #e74c3c; color: white; border: none; cursor: pointer; border-radius: 4px;">Reset Logs</button>
+        </form>
+
+         <h3 style="color: #ccc;">Match History</h3>
+         <div id="matchHistory">
+             <!-- Log entries will appear here -->
+         </div >
+
+    </section>
+</div>
+
+<script>
+    // --- JAVASCRIPT FOR INTERACTIVITY (Collapsibles, Deck Logic, Logging) ---
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const headers = document.querySelectorAll('.collapsible-header');
+        headers.forEach(header => {
+            header.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-target');
+                const targetElement = document.getElementById(targetId);
+                const icon = this.querySelector('.toggle-icon');
+
+                if (targetElement) {
+                    if (targetElement.style.display === 'none') {
+                        targetElement.style.display = 'block';
+                        icon.textContent = '−';
+                    } else {
+                        targetElement.style.display = 'none';
+                        icon.textContent = '+';
+                    }
+                }
+            });
+        });
+
+         // Initialize the deck selector (A real implementation would populate this dynamically)
+        const deckSelect = document.getElementById('deckUsed');
+        if(deckSelect) {
+             console.log("Deck selector initialized. Populate options here.");
+        }
+    });
+
+    function recordMatch(event) {
+        event.preventDefault();
+
+        const deckUsed = document.getElementById('deckUsed').value;
+        const opponentDeck = document.getElementById('opponentDeck').value;
+        const result = document.getElementById('result').value;
+        const date = document.getElementById('date').value;
+
+        if (!deckUsed || !opponentDeck || !result || !date) {
+            alert("Please fill out all match fields.");
+            return;
+        }
+
+        // For this template, we just display it in the history log.
+        const historyDiv = document.getElementById('matchHistory');
+
+        let resultText = result === 'Win' ? '<span style="color: #66cc66; font-weight: bold;">VICTORY!</span>' :
+                          result === 'Loss' ? '<span style="color: #cc6666; font-weight: bold;">DEFEAT.</span>' : 'Draw';
+
+        const newLog = `
+            <div style="border: 1px solid #555; padding: 15px; margin-bottom: 20px; border-radius: 4px; background-color:#2d2d30;">
+                <h4 style="color:#9cdcfe;">Match Log Entry</h4>
+                <p><strong style="color:#ddd;">Date:</strong> ${date}</p>
+                <p><strong style="color:#ddd;">Your Deck:</strong> <a href="#" style="color:#5fa8d3;">${deckUsed}</a></p>
+                <p><strong style="color:#ddd;">Opponent's Deck:</strong> ${opponentDeck}</p>
+                <p><strong style="color:#ddd;">Result:</strong> ${resultText}</p>
+            </div>
+        `;
+
+        historyDiv.insertAdjacentHTML('afterbegin', newLog);
+        alert("Match logged successfully!");
+
+        // Clear form after successful submission
+        event.target.reset();
+    }
+
+    // NEW LOGIC: Handle 'Reset Logs' button click with confirmation popup
+    const resetLogsBtn = document.getElementById('resetLogsBtn');
+    if (resetLogsBtn) {
+        resetLogsBtn.addEventListener('click', function() {
+            if (confirm("⚠️ WARNING! Are you absolutely sure you want to erase all match logs? This action cannot be undone.")) {
+                const historyDiv = document.getElementById('matchHistory');
+                if(historyDiv) {
+                    historyDiv.innerHTML = '';
+                    alert("✅ All match logs have been successfully reset!");
+                } else {
+                    alert("Error: Could not find the match history container.");
+                }
+            }
+        });
+    }
+
+</script>
